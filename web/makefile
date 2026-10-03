@@ -90,8 +90,9 @@ web-test: web-test.cc web-bindings.cc $(SOLVER)
 
 # The C++ binding tests, then every *-test.js. Those need Node 14+ (for
 # par-score.js's private class methods), e.g. emsdk's via EMSDK_NODE.
+# deals.js is a loadPage() dependency; clean removes it, so rebuild here.
 JS_TESTS = $(sort $(wildcard *-test.js))
-test: web-test
+test: web-test deals.js
 	./web-test > /dev/null && echo "web-test: ok"
 	@$(NODE) -e 'process.exit(parseInt(process.versions.node) < 14 ? 1 : 0)' || \
 		{ echo "Node 14+ is needed for the JS tests; set EMSDK_NODE or put it on PATH." >&2; exit 1; }
